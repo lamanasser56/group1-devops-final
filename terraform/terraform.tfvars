@@ -11,13 +11,13 @@ service_cidr                    = "10.255.0.0/16"
 dns_service_ip                  = "10.255.0.10"
 
 # AKS
-kubernetes_version   = null
-system_node_vm_size  = "Standard_B2s"
-system_min_count     = 1
-system_max_count     = 2
-user_node_vm_size    = "Standard_B2s"
-user_min_count       = 1
-user_max_count       = 3
+kubernetes_version  = null
+system_node_vm_size = "Standard_B2s"
+system_min_count    = 1
+system_max_count    = 2
+user_node_vm_size   = "Standard_B2s"
+user_min_count      = 1
+user_max_count      = 3
 
 # Passwords
 grafana_admin_password     = "Lama22@"

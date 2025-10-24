@@ -14,13 +14,13 @@ resource "azurerm_kubernetes_cluster" "main" {
 
   # System Node Pool
   default_node_pool {
-    name                = "system"
-    vm_size             = var.system_node_vm_size
-    vnet_subnet_id      = var.system_subnet_id
-    enable_auto_scaling = true
-    min_count           = var.system_min_count
-    max_count           = var.system_max_count
-    max_pods            = 30
+    name                         = "system"
+    vm_size                      = var.system_node_vm_size
+    vnet_subnet_id               = var.system_subnet_id
+    enable_auto_scaling          = true
+    min_count                    = var.system_min_count
+    max_count                    = var.system_max_count
+    max_pods                     = 30
     only_critical_addons_enabled = true
 
     upgrade_settings {
@@ -33,10 +33,10 @@ resource "azurerm_kubernetes_cluster" "main" {
 
   # Network
   network_profile {
-    network_plugin = "azure"
-    network_policy = "azure"
-    dns_service_ip = var.dns_service_ip
-    service_cidr   = var.service_cidr
+    network_plugin    = "azure"
+    network_policy    = "azure"
+    dns_service_ip    = var.dns_service_ip
+    service_cidr      = var.service_cidr
     load_balancer_sku = "standard"
   }
 

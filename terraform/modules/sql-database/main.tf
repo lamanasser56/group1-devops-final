@@ -13,7 +13,7 @@ resource "azurerm_mssql_server" "main" {
   minimum_tls_version           = "1.2"
   public_network_access_enabled = false
 
-/*
+  /*
   azuread_administrator {
     login_username = var.azuread_admin_login
     object_id      = var.azuread_admin_object_id
@@ -28,10 +28,10 @@ resource "azurerm_mssql_server" "main" {
 
 # SQL Database
 resource "azurerm_mssql_database" "main" {
-  name      = var.database_name
-  server_id = azurerm_mssql_server.main.id
-  sku_name  = var.sku_name
-  collation = "SQL_Latin1_General_CP1_CI_AS"
+  name        = var.database_name
+  server_id   = azurerm_mssql_server.main.id
+  sku_name    = var.sku_name
+  collation   = "SQL_Latin1_General_CP1_CI_AS"
   max_size_gb = var.max_size_gb
 
   tags = var.tags

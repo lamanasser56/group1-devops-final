@@ -6,13 +6,13 @@ locals {
   project_name = var.project_name
   environment  = var.environment
 
-  resource_group_name        = "rg-${local.project_name}-${local.environment}"
-  aks_cluster_name           = "aks-${local.project_name}-${local.environment}"
-  acr_name                   = "${local.project_name}acr${local.environment}"
-  sql_server_name            = "sql-${local.project_name}-${local.environment}"
-  key_vault_name             = "kv-${local.project_name}-${local.environment}-lama"
-  log_analytics_name         = "log-${local.project_name}-${local.environment}"
-  vnet_name                  = "vnet-${local.project_name}-${local.environment}"
+  resource_group_name = "rg-${local.project_name}-${local.environment}"
+  aks_cluster_name    = "aks-${local.project_name}-${local.environment}"
+  acr_name            = "${local.project_name}acr${local.environment}"
+  sql_server_name     = "sql-${local.project_name}-${local.environment}"
+  key_vault_name      = "kv-${local.project_name}-${local.environment}-lama"
+  log_analytics_name  = "log-${local.project_name}-${local.environment}"
+  vnet_name           = "vnet-${local.project_name}-${local.environment}"
 
   state_resource_group_name  = "rg-${local.project_name}-${local.environment}-state"
   state_storage_account_name = "tfstate${local.project_name}${local.environment}"
@@ -125,33 +125,33 @@ module "key_vault" {
 module "aks" {
   source = "./modules/aks"
 
-  cluster_name               = local.aks_cluster_name
-  resource_group_name        = azurerm_resource_group.main.name
-  location                   = azurerm_resource_group.main.location
-  dns_prefix                 = "${local.project_name}-${local.environment}"
-  kubernetes_version         = var.kubernetes_version
-  
+  cluster_name        = local.aks_cluster_name
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  dns_prefix          = "${local.project_name}-${local.environment}"
+  kubernetes_version  = var.kubernetes_version
+
   # System Node Pool
   system_subnet_id    = module.networking.aks_system_subnet_id
   system_node_vm_size = var.system_node_vm_size
   system_min_count    = var.system_min_count
   system_max_count    = var.system_max_count
-  
+
   # User Node Pool
   user_subnet_id    = module.networking.aks_user_subnet_id
   user_node_vm_size = var.user_node_vm_size
   user_min_count    = var.user_min_count
   user_max_count    = var.user_max_count
-  
+
   # Network
   service_cidr   = var.service_cidr
   dns_service_ip = var.dns_service_ip
-  
+
   # Integrations
   log_analytics_workspace_id = module.monitoring.log_analytics_workspace_id
   acr_id                     = module.acr.acr_id
   grafana_admin_password     = var.grafana_admin_password
-  
+
   tags = var.tags
 
   # depends_on = [module.networking, module.monitoring, module.acr]
@@ -168,25 +168,14 @@ module "sql_database" {
   administrator_login_password = var.sql_administrator_password
   #azuread_admin_login          = var.azuread_sql_admin_login
   #azuread_admin_object_id      = var.azuread_sql_admin_object_id
-  database_name                = var.sql_database_name
-  sku_name                     = var.sql_sku_name
-  max_size_gb                  = var.sql_max_size_gb
-  private_endpoint_subnet_id   = module.networking.private_endpoints_subnet_id
-  private_dns_zone_id          = module.networking.sql_private_dns_zone_id
-  log_analytics_workspace_id   = module.monitoring.log_analytics_workspace_id
-  key_vault_id                 = module.key_vault.key_vault_id
-  tags                         = var.tags
+  database_name              = var.sql_database_name
+  sku_name                   = var.sql_sku_name
+  max_size_gb                = var.sql_max_size_gb
+  private_endpoint_subnet_id = module.networking.private_endpoints_subnet_id
+  private_dns_zone_id        = module.networking.sql_private_dns_zone_id
+  log_analytics_workspace_id = module.monitoring.log_analytics_workspace_id
+  key_vault_id               = module.key_vault.key_vault_id
+  tags                       = var.tags
 
   depends_on = [module.networking, module.key_vault]
 }
-
-# AKS CSI Driver to Key Vault
-/*
-resource "azurerm_role_assignment" "aks_kv_secrets_user" {
-  principal_id                     = module.aks.key_vault_secrets_provider_identity_object_id
-  role_definition_name             = "Key Vault Secrets User"
-  scope                            = module.key_vault.key_vault_id
-  skip_service_principal_aad_check = true
-
-  depends_on = [module.aks, module.key_vault]
-}*/
