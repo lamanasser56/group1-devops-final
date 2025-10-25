@@ -1,16 +1,9 @@
-# Use local backend temporarily
+# Backend Configuration - Simple Setup
 terraform {
-  backend "local" {
-    path = "terraform.tfstate"
+  backend "azurerm" {
+    resource_group_name  = "rg-devops-team-state"
+    storage_account_name = "tfstatedevopsteamgroup"
+    container_name       = "terraformstate"
+    key                  = "aks-platform/terraform.tfstate"
   }
 }
-
-# Original Azure backend - uncomment when Storage Account is created
-# terraform {
-#   backend "azurerm" {
-#     resource_group_name  = "rg-devops-lama-state"
-#     storage_account_name = "tfstatedevopslama"
-#     container_name       = "terraformstate"
-#     key                  = "aks-platform/terraform.tfstate"
-#   }
-# }

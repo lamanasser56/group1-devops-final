@@ -65,6 +65,65 @@ resource "azurerm_network_security_group" "aks_user" {
   location            = var.location
   tags                = var.tags
 }
+# Allow HTTP from Internet
+resource "azurerm_network_security_rule" "aks_user_http_in" {
+  name                        = "Allow-HTTP-Internet"
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "80"
+  source_address_prefix       = "Internet"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.aks_user.name
+}
+
+# Allow HTTPS from Internet (optional if you enable TLS)
+resource "azurerm_network_security_rule" "aks_user_https_in" {
+  name                        = "Allow-HTTPS-Internet"
+  priority                    = 110
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "443"
+  source_address_prefix       = "Internet"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.aks_user.name
+}
+
+# Allow Azure Load Balancer health probes
+resource "azurerm_network_security_rule" "aks_user_azlb_probe" {
+  name                        = "Allow-AzureLoadBalancer-Probes"
+  priority                    = 120
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "AzureLoadBalancer"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.aks_user.name
+}
+
+# Allow intra-VNet traffic
+resource "azurerm_network_security_rule" "aks_user_vnet_in" {
+  name                        = "Allow-VNet-Inbound"
+  priority                    = 130
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "VirtualNetwork"
+  destination_address_prefix  = "VirtualNetwork"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.aks_user.name
+}
 
 # NSG for Private Endpoints
 resource "azurerm_network_security_group" "private_endpoints" {
