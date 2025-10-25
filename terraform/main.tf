@@ -9,7 +9,9 @@ locals {
   resource_group_name = "rg-${local.project_name}-${local.environment}"
   aks_cluster_name    = "aks-${local.project_name}-${local.environment}"
   sql_server_name     = "sql-${local.project_name}-${local.environment}"
-  key_vault_name      = "kv-${local.project_name}-${local.environment}-lama"
+  # Use lowercase and limit to 8 chars for key vault name uniqueness
+  key_vault_suffix    = substr(lower(replace(sha256("${local.project_name}${local.environment}"), "-", "")), 0, 8)
+  key_vault_name      = "kv${local.project_name}${local.environment}${local.key_vault_suffix}"
   log_analytics_name  = "log-${local.project_name}-${local.environment}"
   vnet_name           = "vnet-${local.project_name}-${local.environment}"
 }

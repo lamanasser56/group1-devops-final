@@ -68,7 +68,7 @@ variable "kubernetes_version" {
 variable "system_node_vm_size" {
   description = "System node VM size"
   type        = string
-  default     = "Standard_D2s_v3"
+  default     = "Standard_DC2ds_v3"
 }
 
 variable "system_min_count" {
@@ -86,7 +86,7 @@ variable "system_max_count" {
 variable "user_node_vm_size" {
   description = "User node VM size"
   type        = string
-  default     = "Standard_D2s_v3"
+  default     = "Standard_DC2ds_v3"
 }
 
 variable "user_min_count" {

@@ -1,6 +1,6 @@
 project_name = "devops"
-environment  = "lama"
-location     = "eastus"
+environment  = "lama22"
+location     = "canadacentral"
 
 # Network
 vnet_address_space              = ["10.0.0.0/16"]
@@ -12,15 +12,15 @@ dns_service_ip                  = "10.255.0.10"
 
 # AKS
 kubernetes_version  = null
-system_node_vm_size = "Standard_D2s_v3"
+system_node_vm_size = "Standard_DC2ds_v3"
 system_min_count    = 1
 system_max_count    = 2
-user_node_vm_size   = "Standard_D2s_v3"
+user_node_vm_size   = "Standard_DC2ds_v3"
 user_min_count      = 1
 user_max_count      = 3
 
 # Passwords
-grafana_admin_password     = "Lama22@"
+grafana_admin_password     = "lama22@"
 sql_administrator_password = "MySecurePassword123!"
 
 # Azure AD
