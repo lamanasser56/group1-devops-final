@@ -16,7 +16,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: 4.239.138.227.nip.io    # ✅ استخدمي الـ IP حق ingress controller
+  - host: 4.229.193.139.nip.io   # ✅ استخدمي الـ IP حق ingress controller
     http:
       paths:
       - path: /api
