@@ -86,6 +86,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
 
 # ACR Pull Role
 resource "azurerm_role_assignment" "aks_acr_pull" {
+  count                           = var.acr_id == null ? 0 : 1
   principal_id                     = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
   role_definition_name             = "AcrPull"
   scope                            = var.acr_id

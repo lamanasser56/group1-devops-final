@@ -99,6 +99,7 @@ variable "log_analytics_workspace_id" {
 variable "acr_id" {
   description = "ACR ID"
   type        = string
+  default     = null
 }
 
 # Grafana

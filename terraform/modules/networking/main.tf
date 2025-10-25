@@ -10,6 +10,12 @@ resource "azurerm_virtual_network" "main" {
   location            = var.location
   address_space       = var.vnet_address_space
   tags                = var.tags
+
+  timeouts {
+    create = "30m"
+    update = "30m"
+    delete = "30m"
+  }
 }
 
 # AKS System Subnet

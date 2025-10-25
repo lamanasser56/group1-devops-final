@@ -14,9 +14,11 @@ output "aks_cluster_fqdn" {
   value = module.aks.cluster_fqdn
 }
 
+/*
 output "acr_login_server" {
   value = module.acr.acr_login_server
 }
+*/
 
 output "key_vault_uri" {
   value = module.key_vault.key_vault_uri

@@ -10,6 +10,12 @@ resource "azurerm_log_analytics_workspace" "main" {
   sku                 = "PerGB2018"
   retention_in_days   = var.log_analytics_retention_days
   tags                = var.tags
+
+  timeouts {
+    create = "30m"
+    update = "30m"
+    delete = "30m"
+  }
 }
 
 # Container Insights Solution

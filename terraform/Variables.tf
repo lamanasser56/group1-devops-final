@@ -137,6 +137,23 @@ variable "sql_max_size_gb" {
   type        = number
   default     = 2
 }
+
+# Tags
+variable "tags" {
+  description = "Tags to apply to all resources"
+  type        = map(string)
+  default = {
+    "ManagedBy" = "Terraform"
+    "Project"   = "DevOps-Capstone"
+  }
+}
+
+# Log Analytics
+variable "log_analytics_retention_days" {
+  description = "Log Analytics retention days"
+  type        = number
+  default     = 30
+}
 /*
 variable "azuread_sql_admin_login" {
   description = "Azure AD admin email"
@@ -153,21 +170,4 @@ variable "acr_sku" {
   description = "ACR SKU"
   type        = string
   default     = "Standard"
-}
-
-# Monitoring
-variable "log_analytics_retention_days" {
-  description = "Log Analytics retention"
-  type        = number
-  default     = 30
-}
-
-# Tags
-variable "tags" {
-  description = "Tags"
-  type        = map(string)
-  default = {
-    Project   = "DevOps-Capstone"
-    ManagedBy = "Terraform"
-  }
 }

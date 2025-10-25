@@ -1,66 +1,18 @@
 # ===================================
 # Main Configuration - SIMPLIFIED
 # ===================================
-# هببد
+
 locals {
   project_name = var.project_name
   environment  = var.environment
 
   resource_group_name = "rg-${local.project_name}-${local.environment}"
   aks_cluster_name    = "aks-${local.project_name}-${local.environment}"
-  acr_name            = "${local.project_name}acr${local.environment}"
-  sql_server_name     = "sql-${local.project_name}-${local.environment}"
-  key_vault_name      = "kv-${local.project_name}-${local.environment}-lama"
-  log_analytics_name  = "log-${local.project_name}-${local.environment}"
-  vnet_name           = "vnet-${local.project_name}-${local.environment}"
-
-  state_resource_group_name  = "rg-${local.project_name}-${local.environment}-state"
-  state_storage_account_name = "tfstate${local.project_name}${local.environment}"
-}
-
-# Resource group خاص بحساب التخزين (state)
-resource "azurerm_resource_group" "state" {
-  name     = local.state_resource_group_name
-  location = var.location
-  tags     = var.tags
-}
-
-# حساب التخزين + الحاوية لحفظ حالة Terraform
-module "state_storage" {
-  source = "./modules/storage-account"
-
-  resource_group_name  = azurerm_resource_group.state.name
-  location             = azurerm_resource_group.state.location
-  storage_account_name = local.state_storage_account_name
-  container_name       = "terraformstate"
-  tags                 = var.tags
-}
-
-# … (اترك الموارد الحالية كما هي: RG الرئيسي، الشبكات، المراقبة، إلخ)
-# تأكد أن المورد المكرر للـ role assignment محذوف (تبقي فقط الكتلة الواحدة)
-resource "azurerm_role_assignment" "aks_kv_secrets_user" {
-  principal_id                     = module.aks.key_vault_secrets_provider_identity_object_id
-  role_definition_name             = "Key Vault Secrets User"
-  scope                            = module.key_vault.key_vault_id
-  skip_service_principal_aad_check = true
-
-  depends_on = [module.aks, module.key_vault]
-}
-#نهاية
-/* 
-locals {
-  project_name = var.project_name
-  environment  = var.environment
-  
-  resource_group_name = "rg-${local.project_name}-${local.environment}"
-  aks_cluster_name    = "aks-${local.project_name}-${local.environment}"
-  acr_name            = "${local.project_name}acr${local.environment}"
   sql_server_name     = "sql-${local.project_name}-${local.environment}"
   key_vault_name      = "kv-${local.project_name}-${local.environment}-lama"
   log_analytics_name  = "log-${local.project_name}-${local.environment}"
   vnet_name           = "vnet-${local.project_name}-${local.environment}"
 }
-*/
 # Resource Group
 resource "azurerm_resource_group" "main" {
   name     = local.resource_group_name
@@ -92,18 +44,6 @@ module "monitoring" {
   application_insights_name    = "appi-${local.project_name}-${local.environment}"
   log_analytics_retention_days = var.log_analytics_retention_days
   tags                         = var.tags
-}
-
-# ACR
-module "acr" {
-  source = "./modules/acr"
-
-  acr_name                   = local.acr_name
-  resource_group_name        = azurerm_resource_group.main.name
-  location                   = azurerm_resource_group.main.location
-  acr_sku                    = var.acr_sku
-  log_analytics_workspace_id = module.monitoring.log_analytics_workspace_id
-  tags                       = var.tags
 }
 
 # Key Vault
@@ -149,7 +89,6 @@ module "aks" {
 
   # Integrations
   log_analytics_workspace_id = module.monitoring.log_analytics_workspace_id
-  acr_id                     = module.acr.acr_id
   grafana_admin_password     = var.grafana_admin_password
 
   tags = var.tags
@@ -178,4 +117,14 @@ module "sql_database" {
   tags                       = var.tags
 
   depends_on = [module.networking, module.key_vault]
+}
+
+# AKS Key Vault Secrets User Role Assignment
+resource "azurerm_role_assignment" "aks_kv_secrets_user" {
+  principal_id                     = module.aks.key_vault_secrets_provider_identity_object_id
+  role_definition_name             = "Key Vault Secrets User"
+  scope                            = module.key_vault.key_vault_id
+  skip_service_principal_aad_check = true
+
+  depends_on = [module.aks, module.key_vault]
 }

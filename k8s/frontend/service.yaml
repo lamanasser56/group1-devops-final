@@ -3,11 +3,17 @@ kind: Service
 metadata:
   name: frontend-service
   namespace: app
+  labels:
+    app: frontend
+    tier: frontend
 spec:
+  type: ClusterIP
   selector:
     app: frontend
+    tier: frontend
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: ClusterIP
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  sessionAffinity: None
