@@ -17,9 +17,12 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: manaralz/frontend-final:latest  # استخدم اسم صورتك
+        image: lamai7/frontend-final:v2
         ports:
         - containerPort: 80
+        env:
+        - name: VITE_API_BASE_URL
+          value: "/api"     # خلي الفرونت يضرب نفس الهوست على /api
         resources:
           requests:
             cpu: 100m

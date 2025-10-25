@@ -19,7 +19,9 @@ data:
 
   # إعدادات Spring Boot
   SPRING_DATASOURCE_DRIVER_CLASS_NAME: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-  SPRING_DATASOURCE_URL: jdbc:sqlserver://sql-devops-lama22.database.windows.net:1433;databaseName=appdb;encrypt=true;trustServerCertificate=false;loginTimeout=30;
+  SPRING_DATASOURCE_URL: "jdbc:sqlserver://sql-devops-lama22.database.windows.net:1433;databaseName=appdb;encrypt=true;trustServerCertificate=false;loginTimeout=30;"
+  MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED: "true"
+
   SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
   SPRING_JPA_SHOW_SQL: "false"
   SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.SQLServerDialect"
@@ -29,7 +31,8 @@ data:
   LOGGING_LEVEL_COM_EXAMPLE: "DEBUG"
 
   # إعدادات CORS للـ Frontend (عدّليها للدومين الفعلي)
-  CORS_ALLOWED_ORIGINS: "https://4.229.193.139.nip.io"
+  CORS_ALLOWED_ORIGINS: "http://4.229.193.139.nip.io,https://4.229.193.139.nip.io"
+
 
   # إعدادات Actuator للمراقبة
   MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,metrics,prometheus"

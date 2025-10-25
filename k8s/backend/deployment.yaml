@@ -35,8 +35,8 @@ spec:
         env:
         - name: SERVER_PORT
           value: "8080"
-        - name: SPRING_PROFILES_ACTIVE
-          value: "production"
+        #- name: SPRING_PROFILES_ACTIVE
+         # value: "production"
         envFrom:
         - configMapRef:
             name: backend-config
